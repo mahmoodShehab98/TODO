@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -31,6 +32,19 @@ public class CategoryController {
         System.out.println("Calling getCategory");
 
         return categoryService.getCategory(id);
+    }
+    //PUT
+    @PutMapping("/category/{categoryId}")
+    public Category updateCategory(@PathVariable(value = "categoryId") Long categoryId, @RequestBody Category categoryObject) {
+        System.out.println("calling updateCategory ==>");
+        return categoryService.updateCategory(categoryId,categoryObject);
+    }
+
+    //DELETE
+    @DeleteMapping("/categories/{categoryId}")
+    public Optional<Category> deleteCategory(@PathVariable(value = "categoryId") Long categoryid) {
+        System.out.println("calling deleteCategory ==>");
+        return categoryService.deleteCategory(categoryid);
     }
 
 }

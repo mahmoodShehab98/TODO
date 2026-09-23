@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -40,6 +41,43 @@ public class CategoryService {
 
         return  categoryRepository.findById(id).orElseThrow(()->new InformationNotFoundException("Category Not Found"));
     }
+
+    //    UPDATE
+    public Category updateCategory(Long categoryId, @RequestBody Category categoryObject){
+        System.out.println("calling updateCategory ==> ");
+        Optional<Category> category= categoryRepository.findById(categoryId);
+        if (category.isPresent()) {
+            if (categoryObject.getName().equals(category.get().getName())) {
+                System.out.println("same");
+                throw new InformationExistException("category " + category.get().getName() + "is already exists");
+
+            } else {
+                Category updateCategory = categoryRepository.findById(categoryId).get();
+                updateCategory.setName(categoryObject.getName());
+                updateCategory.setDescription(categoryObject.getDescription());
+                return categoryRepository.save(updateCategory);
+            }
+        }else {
+            throw new InformationNotFoundException("Category with id " + category + "not found");
+
+
+        }
+    }
+
+//        DELETE
+
+    public Optional<Category> deleteCategory(Long categoryid){
+        System.out.println("service calling deleteCategory ==> ");
+        Optional<Category> category = categoryRepository.findById(categoryid);
+
+        if (category.isPresent()){
+            categoryRepository.deleteById(categoryid);
+            return category;
+        }else {
+            throw new InformationNotFoundException("Category with id " + categoryid + "not found");
+        }
+    }
+
 
 
 
