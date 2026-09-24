@@ -3,6 +3,8 @@ package com.ga.todo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 // Having those
 //@AllArgsConstructor
 //@NoArgsConstructor
@@ -26,5 +28,9 @@ public class Category {
 
     @Column
     private String description;
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "category", orphanRemoval = true)
+    private List<Item> itemList;
+
 }
 
