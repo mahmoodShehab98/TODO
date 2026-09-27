@@ -43,4 +43,10 @@ public class Item {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private com.ga.todo.model.User user;
+
 }
