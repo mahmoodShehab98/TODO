@@ -23,18 +23,14 @@ public class SecurityConfiguration {
 
     private final JwtRequestFilter jwtRequestFilter;
 
-
+    @Bean
+    public JwtRequestFilter authenticationJwtTokenFilter() {
+        return new JwtRequestFilter();
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,12 +46,19 @@ public class SecurityConfiguration {
                                 "/auth/users/",
                                 "/auth/users/login",
                                 "/auth/users/register",
-                                "/api/users/**" // Added to cover standard API endpoint paths
+                                "/api/users/**",
+                                "/error"// Added to cover standard API endpoint paths
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }

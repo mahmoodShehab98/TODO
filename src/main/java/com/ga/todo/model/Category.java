@@ -2,20 +2,18 @@ package com.ga.todo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-// Having those
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@ToString
-//@Getter
-//@Setter
-
-// Equals
-@Data // It generates all setters, getters, toString, and Constructors
-
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Getter
+@Setter
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -30,13 +28,23 @@ public class Category {
     @Column
     private String description;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "category", orphanRemoval = true)
-    private List<Item> itemList;
+    @Column
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = true)
+    private String imageUrl;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    private List<Item> ItemList;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private com.ga.todo.model.User user;
+    @JoinColumn(name="user_id")
+    private User user;
 
 }
-
